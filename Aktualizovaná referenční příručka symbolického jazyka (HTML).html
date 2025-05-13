@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -369,12 +330,71 @@ Vrať číslo.
   číslo)
     </pre>
 
+    <h3>2.14. Čtení souboru</h3>
+    <p><strong>Syntaxe</strong>: <code>Načti soubor [název] do proměnné [proměnná].</code></p>
+    <p><strong>Popis</strong>: Načte obsah textového souboru a uloží ho jako řetězec do proměnné.</p>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou načti_kód, která přijímá hodnotu jméno_souboru.
+Načti soubor jméno_souboru do proměnné kód.
+Vytiskni kód.
+Vrať kód.
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun načti_kód (jméno_souboru)
+  (with-open-file (stream jméno_souboru :direction :input)
+    (let ((kód (make-string (file-length stream))))
+      (read-sequence kód stream)
+      (print kód)
+      kód)))
+    </pre>
+
+    <h3>2.15. Zápis do souboru</h3>
+    <p><strong>Syntaxe</strong>: <code>Ulož kód do souboru [název].</code></p>
+    <p><strong>Popis</strong>: Uloží obsah proměnné (např. vygenerovaný kód) do textového souboru.</p>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou ulož_kód, která přijímá hodnotu kód a hodnotu jméno_souboru.
+Ulož kód do souboru jméno_souboru.
+Vytiskni "Kód uložen.".
+Vrať výsledek.
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun ulož_kód (kód jméno_souboru)
+  (with-open-file (stream jméno_souboru :direction :output :if-exists :supersede)
+    (write-string kód stream))
+  (print "Kód uložen.")
+  t)
+    </pre>
+
+    <h3>2.16. Rozdělení řetězce na tokeny</h3>
+    <p><strong>Syntaxe</strong>: <code>Rozděl řetězec [řetězec] na tokeny podle oddělovače [oddělovač] a ulož do proměnné [proměnná].</code></p>
+    <p><strong>Popis</strong>: Rozdělí řetězec na seznam tokenů podle zadaného oddělovače (např. mezery).</p>
+    <p><strong>Poznámka</strong>: Vyžaduje knihovnu <code>split-sequence</code> v Common Lispu.</p>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou tokenizuj, která přijímá hodnotu text.
+Rozděl řetězec text na tokeny podle oddělovače " " a ulož do proměnné tokeny.
+Vytiskni tokeny.
+Vrať tokeny.
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun tokenizuj (text)
+  (let ((tokeny (split-sequence:split-sequence #\Space text)))
+    (print tokeny)
+    tokeny))
+    </pre>
+
     <h2>3. Jak používat příručku</h2>
     <ul>
         <li><strong>Učení</strong>: Procházej jednotlivé sekce a zkoušej příklady v našem jazyce.</li>
         <li><strong>Psaní kódu</strong>: Piš kód podle syntaxe a pošli ho ke kontrole. Přeložím ho do Lispu a vrátím výstup.</li>
         <li><strong>Vyhledávání</strong>: Použij <code>Ctrl+F</code> k nalezení konkrétních příkazů (např. „Vytvoř funkci“, „Vytiskni“).</li>
         <li><strong>Stažení</strong>: Ulož tento soubor jako <code>jazyk_referencni_prirucka.html</code> a otevři v prohlížeči.</li>
+        <li><strong>Repozitář</strong>: Příručka je spravována na <a href="https://github.com/petrstrajt/DSL-jazyk">GitHubu</a>.</li>
     </ul>
 
     <h2>4. Poznámky</h2>
@@ -382,6 +402,7 @@ Vrať číslo.
         <li>Jazyk je verbose, aby byl srozumitelný pro začátečníky.</li>
         <li>Všechny konstrukce mapují na Common Lisp, takže kód lze spustit v prostředí jako SBCL nebo CLISP.</li>
         <li>Pro pokročilé funkce (např. makra) se doporučuje kombinovat s jednoduchými konstrukcemi pro lepší čitelnost.</li>
+        <li>Pro tokenizaci (sekce 2.16) je potřeba knihovna <code>split-sequence</code>, kterou lze nainstalovat přes Quicklisp.</li>
     </ul>
 </body>
-</html occurence=2>
+</html>
