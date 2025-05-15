@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vývoj parseru pro DSL-jazyk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            margin: 10px 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vývoj parseru pro DSL-jazyk</h1>
+    <p>Tento dokument popisuje proces vývoje parseru pro symbolický jazyk nad Common Lisp (DSL-jazyk). Parser převádí kód napsaný v DSL (popisaný v <a href="./jazyk_referencni_prirucka.html">referenční příručce</a>) do spustitelného Common Lisp kódu. Cílem je podpora všech konstrukcí jazyka a vytvoření robustního nástroje pro automatizaci převodu.</p>
+    <p>Zpět na <a href="./index.html">hlavní stránku</a>.</p>
+
+    <h2>1. Úvod do parseru</h2>
+    <p>Parser je program, který analyzuje vstupní DSL kód a generuje ekvivalentní Common Lisp kód. Proces zahrnuje tři hlavní fáze:</p>
+    <ul>
+        <li><strong>Lexikální analýza</strong>: Rozdělení vstupního textu na tokeny (např. klíčová slova, identifikátory).</li>
+        <li><strong>Syntaktická analýza</strong>: Rozpoznání struktur (např. funkce, podmínky) a vytvoření abstraktního syntaktického stromu (AST).</li>
+        <li><strong>Generování kódu</strong>: Převod AST na spustitelný Common Lisp kód.</li>
+    </ul>
+    <p>Parser využívá konstrukce jazyka popsané v referenční příručce, zejména <code>Rozděl řetězec</code> pro lexikální analýzu a <code>Ulož kód do souboru</code> pro uložení vygenerovaného kódu.</p>
+
+    <h2>2. Lexikální analýza</h2>
+    <p>Lexikální analýza rozděluje vstupní DSL kód na seznam tokenů, které parser dále zpracovává. Například kód:</p>
+    <pre>
+Vytvoř funkci pojmenovanou přičti, která přijímá hodnotu x a hodnotu y.
+Proveď součet x a y.
+Vrať výsledek.
+    </pre>
+    <p>je rozdělen na tokeny jako <code>"Vytvoř"</code>, <code>"funkci"</code>, <code>"pojmenovanou"</code>, atd. Pro tuto úlohu používáme konstrukci <code>Rozděl řetězec</code>.</p>
+    <p><strong>Příklad programu</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou tokenizuj_kód, která přijímá hodnotu text.
+Rozděl řetězec text na tokeny podle oddělovače " " a ulož do proměnné tokeny.
+Vytiskni tokeny.
+Vrať tokeny.
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun tokenizuj_kód (text)
+  (let ((tokeny (split-sequence:split-sequence #\Space text)))
+    (print tokeny)
+    tokeny))
+    </pre>
+    <p><strong>Ukázka použití</strong>:</p>
+    <ul>
+        <li>Vstup: <code>"Vytvoř funkci pojmenovanou přičti"</code></li>
+        <li>Výstup: <code>("Vytvoř" "funkci" "pojmenovanou" "přičti")</code></li>
+    </ul>
+    <p>V dalších krocích budeme tokeny kategorizovat (např. klíčová slova, identifikátory) a připravíme je pro syntaktickou analýzu.</p>
+
+    <h2>3. Syntaktická analýza</h2>
+    <p>Tato sekce bude doplněna, jakmile dokončíme lexikální analýzu. Cílem je rozpoznat struktury DSL (např. definice funkcí, podmínky) a vytvořit abstraktní syntaktický strom (AST).</p>
+
+    <h2>4. Generování kódu</h2>
+    <p>Tato sekce bude doplněna po dokončení syntaktické analýzy. Zaměříme se na převod AST na Common Lisp kód.</p>
+
+    <h2>5. Poznámky a budoucí rozšíření</h2>
+    <p>Parser bude průběžně vylepšován o:</p>
+    <ul>
+        <li>Chybové hlášky pro neplatný DSL kód.</li>
+        <li>Podporu pro načítání DSL kódu ze souborů.</li>
+        <li>Optimalizaci generovaného Lisp kódu.</li>
+    </ul>
+</body>
+</html>
