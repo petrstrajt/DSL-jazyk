@@ -35,11 +35,19 @@
         li {
             margin: 5px 0;
         }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <h1>Referenční příručka symbolického jazyka nad Common Lisp</h1>
     <p>Tato příručka poskytuje přehled nástrojů symbolického jazyka navrženého jako nadstavba nad Common Lisp. Jazyk používá přirozenou češtinu, eliminuje závorky a je určen pro snadné popisování programovacích úloh. Příručka slouží jako učební pomůcka pro rychlé seznámení s jazykem.</p>
+    <p>Podrobnosti o vývoji parseru naleznete v <a href="./parser_vyvoj.html">dokumentaci vývoje parseru</a>.</p>
 
     <h2>1. Základní informace</h2>
     <ul>
@@ -394,7 +402,9 @@ Vrať tokeny.
         <li><strong>Psaní kódu</strong>: Piš kód podle syntaxe a pošli ho ke kontrole. Přeložím ho do Lispu a vrátím výstup.</li>
         <li><strong>Vyhledávání</strong>: Použij <code>Ctrl+F</code> k nalezení konkrétních příkazů (např. „Vytvoř funkci“, „Vytiskni“).</li>
         <li><strong>Stažení</strong>: Ulož tento soubor jako <code>jazyk_referencni_prirucka.html</code> a otevři v prohlížeči.</li>
-        <li><strong>Repozitář</strong>: Příručka je spravována na <a href="https://github.com/petrstrajt/DSL-jazyk">GitHubu</a>.</li>
+        <li><strong>Online přístup</strong>: Příručka je dostupná na <a href="https://petrstrajt.github.io/DSL-jazyk/jazyk_referencni_prirucka.html">GitHub Pages</a>.</li>
+        <li><strong>Dokumentace parseru</strong>: Postup vývoje parseru je popsán v <a href="./parser_vyvoj.html">dokumentaci vývoje parseru</a>.</li>
+        <li><strong>Repozitář</strong>: Příručka a další zdroje jsou spravovány na <a href="https://github.com/petrstrajt/DSL-jazyk">GitHubu</a>.</li>
     </ul>
 
     <h2>4. Poznámky</h2>
