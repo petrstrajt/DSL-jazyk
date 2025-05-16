@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSL-jazyk</title>
+    <title>Referenční příručka symbolického jazyka nad Common Lisp</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,17 +16,182 @@
         h1, h2, h3 {
             color: #333;
         }
-        h1 { font-size: 2em; }
-        p { margin: 10px 0; }
-        a { color: #0066cc; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            margin: 10px 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <h1>Vítejte v DSL-jazyk</h1>
-    <p>Toto je repozitář pro symbolický jazyk navržený jako nadstavba nad Common Lisp.</p>
-    <p><a href="./referencni_prirucka.html">Přejít na referenční příručku</a></p>
-    <p><a href="./parser_vyvoj.html">Přejít na dokumentaci vývoje parseru</a></p>
-    <p>Více informací najdete na <a href="https://github.com/petrstrajt/DSL-jazyk">GitHub repozitáři</a>.</p>
-</body>
-</html>
+    <h1>Referenční příručka symbolického jazyka nad Common Lisp</h1>
+    <p>Tato příručka poskytuje přehled nástrojů symbolického jazyka navrženého jako nadstavba nad Common Lisp. Jazyk používá přirozenou češtinu, eliminuje závorky a je určen pro snadné popisování programovacích úloh. Příručka slouží jako učební pomůcka pro rychlé seznámení s jazykem.</p>
+    <p>Podrobnosti o vývoji parseru naleznete v <a href="./parser_vyvoj.html">dokumentaci vývoje parseru</a>.</p>
+
+    <h2>1. Základní informace</h2>
+    <ul>
+        <li><strong>Formát</strong>: Čistě textový, bloky odděleny prázdnými řádky.</li>
+        <li><strong>Syntaxe</strong>: Striktní, s pevně danými klíčovými slovy pro jednoznačný převod do Common Lispu.</li>
+        <li><strong>Interpunkce</strong>: DSL kód nepoužívá interpunkci (čárky, tečky), aby byl jednodušší pro zpracování a čtení.</li>
+        <li><strong>Cíl</strong>: Umožnit programátorům soustředit se na problém, ne na syntaxi.</li>
+    </ul>
+
+    <h2>2. Seznam nástrojů</h2>
+
+    <h3>2.1. Definice funkce</h3>
+    <p><strong>Syntaxe</strong>: <code>Vytvoř funkci pojmenovanou [název] která přijímá hodnotu [parametry]</code></p>
+    <p><strong>Popis</strong>: Vytvoří funkci s parametry oddělenými slovem „a“.</p>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou přičti která přijímá hodnotu x a hodnotu y
+Proveď součet x a y
+Vrať výsledek
+    </pre>
+    <p><strong>Převod do Lispu</strong>: <code>(defun přičti (x y) (+ x y))</code></p>
+
+    <h3>2.2. Aritmetické operace</h3>
+    <p><strong>Syntaxe</strong>: <code>Proveď [operace] [argumenty]</code></p>
+    <p><strong>Operace</strong>:</p>
+    <ul>
+        <li><code>součet [x] a [y]</code> → <code>(+ x y)</code></li>
+        <li><code>rozdíl [x] a [y]</code> → <code>(- x y)</code></li>
+        <li><code>součin [x] a [y]</code> → <code>(* x y)</code></li>
+        <li><code>podíl [x] a [y]</code> → <code>(/ x y)</code></li>
+    </ul>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou čtverec která přijímá hodnotu x
+Proveď součin x a x
+Vrať výsledek
+    </pre>
+    <p><strong>Převod do Lispu</strong>: <code>(defun čtverec (x) (* x x))</code></p>
+
+    <h3>2.3. Podmínky</h3>
+    <p><strong>Syntaxe</strong>:</p>
+    <pre>
+Pokud [podmínka] vrať [výsledek]
+Jinak vrať [výsledek]
+    </pre>
+    <p><strong>Srovnávací operátory</strong>:</p>
+    <ul>
+        <li><code>je větší než</code> → <code>></code></li>
+        <li><code>je menší než</code> → <code><</code></li>
+        <li><code>je rovno</code> → <code>=</code></li>
+        <li><code>je prázdný</code> → <code>null</code></li>
+    </ul>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou větší která přijímá hodnotu a a hodnotu b
+Pokud je a větší než b vrať a
+Jinak vrať b
+    </pre>
+    <p><strong>Převod do Lispu</strong>: <code>(defun větší (a b) (if (> a b) a b))</code></p>
+
+    <h3>2.4. Proměnné</h3>
+    <p><strong>Syntaxe</strong>:</p>
+    <ul>
+        <li><code>Definuj proměnnou [název] jako [hodnota]</code> → Vytvoří proměnnou.</li>
+        <li><code>Ulož výsledek do proměnné [název]</code> → Aktualizuje proměnnou.</li>
+    </ul>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou přičti_kvadrát která přijímá hodnotu x
+Definuj proměnnou čtverec jako součin x a x
+Proveď součet čtverec a x
+Vrať výsledek
+    </pre>
+    <p><strong>Převod do Lispu</strong>: <code>(defun přičti_kvadrát (x) (let ((čtverec (* x x))) (+ čtverec x)))</code></p>
+
+    <h3>2.5. Smyčky</h3>
+    <p><strong>Syntaxe</strong>:</p>
+    <pre>
+Opakuj dokud [podmínka]
+[akce]
+Konec opakování
+    </pre>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou součet_do která přijímá hodnotu n
+Definuj proměnnou výsledek jako 0
+Definuj proměnnou i jako 1
+Opakuj dokud je i menší nebo rovno n
+Proveď součet výsledek a i
+Ulož výsledek do proměnné výsledek
+Proveď součet i a 1
+Ulož výsledek do proměnné i
+Konec opakování
+Vrať výsledek
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun součet_do (n)
+  (let ((výsledek 0) (i 1))
+    (loop while (<= i n)
+          do (setf výsledek (+ výsledek i))
+             (setf i (+ i 1))
+          finally (return výsledek))))
+    </pre>
+
+    <h3>2.6. Seznamy</h3>
+    <h4>Vytvoření seznamu</h4>
+    <p><strong>Syntaxe</strong>: <code>Vytvoř seznam obsahující [prvky]</code></p>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou vytvoř_dvojici která přijímá hodnotu x a hodnotu y
+Vytvoř seznam obsahující x a y
+Vrať seznam
+    </pre>
+    <p><strong>Převod do Lispu</strong>: <code>(defun vytvoř_dvojici (x y) (list x y))</code></p>
+
+    <h4>Iterace přes seznam</h4>
+    <p><strong>Syntaxe</strong>:</p>
+    <pre>
+Pro každou hodnotu [prvek] v seznamu [název_seznamu]
+[akce]
+Konec opakování
+    </pre>
+    <p><strong>Příklad</strong>:</p>
+    <pre>
+Vytvoř funkci pojmenovanou součet_seznamu která přijímá hodnotu seznam
+Definuj proměnnou výsledek jako 0
+Pro každou hodnotu prvek v seznamu seznam
+Proveď součet výsledek a prvek
+Ulož výsledek do proměnné výsledek
+Konec opakování
+Vrať výsledek
+    </pre>
+    <p><strong>Převod do Lispu</strong>:</p>
+    <pre>
+(defun součet_seznamu (seznam)
+  (let ((výsledek 0))
+    (dolist (prvek seznam)
+      (setf výsledek (+ výsledek prvek)))
+    výsledek))
+    </pre>
+
+    <h4>Manipulace se seznamem</h4>
+    <p><strong>Syntaxe</strong>:</p>
+    <ul>
+        <li><code>Přidej prvek [hodnota] do seznamu [název_seznamu]</code> → <code>(cons hodnota název_seznamu)</code></li>
+        <li><code>Vrať první pr
