@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Příklad: touch v DSL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #333;
+        }
+        h1, h2 {
+            color: #222;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Příklad: touch v DSL</h1>
+    <p>Tento příklad ukazuje implementaci příkazu <code>touch</code> v programovacím jazyce DSL, který vytvoří nebo aktualizuje soubor.</p>
+    <pre>
+Vytvoř funkci pojmenovanou touch která přijímá hodnotu nazev_souboru
+Pokud je Existuje soubor nazev_souboru rovná nepravda
+    Zapiš "" do souboru pojmenovaného nazev_souboru
+Vrať pravda
+    </pre>
+    <p>Výše uvedený kód zkontroluje, zda soubor existuje, a pokud ne, vytvoří prázdný soubor. Funkce vrátí <code>pravda</code> při úspěchu.</p>
+</body>
+</html>
