@@ -1,48 +1,9 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Učebnice programování v DSL</title>
+    <title>Učebnice DSL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,115 +12,48 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-        }
-        h1, h2 {
             color: #333;
         }
-        code {
-            background: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 3px;
+        h1, h2 {
+            color: #222;
+        }
+        p {
+            margin: 15px 0;
         }
         pre {
-            background: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
         }
-        p, ul {
-            margin: 10px 0;
+        a {
+            color: #0066cc;
+            text-decoration: none;
         }
-        li {
-            margin: 5px 0;
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Učebnice programování v DSL</h1>
-    <p>Tato učebnice vás provede základy programování v našem jazyce DSL, který je navržený tak, aby byl srozumitelný pro začátečníky a převáděl český kód na Common Lisp.</p>
+    <h1>Učebnice DSL</h1>
+    <p>Tato učebnice vás provede základy programovacího jazyka DSL, který používá českou syntaxi a převádí se na Common Lisp.</p>
 
-    <h2>Kapitola 1: Úvod do našeho jazyka</h2>
-    <p>Poznámka: Obsah této kapitoly bude doplněn později.</p>
+    <h2>Kapitola 1: Úvod</h2>
+    <p>Obsah této kapitoly bude doplněn později.</p>
 
-    <h2>Kapitola 2: Co je programování?</h2>
-    <p>Programování je proces psaní instrukcí, které počítač vykoná. V našem jazyce DSL píšeme kód v češtině, aby byl snadno srozumitelný. Například místo složitých příkazů používáme věty jako <code>Vytvoř funkci</code> nebo <code>Definuj proměnnou</code>.</p>
-    <p>Příklad jednoduchého programu:</p>
-    <pre>
-Definuj proměnnou x jako 5
-Vrať x
-    </pre>
-    <p>Tento program definuje proměnnou <code>x</code> s hodnotou 5 a vrátí ji.</p>
+    <!-- Kapitoly 2–8 by byly podobně prázdné nebo s osnovou, pokud nejsou definovány -->
 
-    <h2>Kapitola 3: Proměnné</h2>
-    <p>Proměnné slouží k uložení hodnot, které můžeme později použít. V DSL definujeme proměnné příkazem <code>Definuj proměnnou</code>.</p>
+    <h2>Kapitola 9: Lexikální analýza</h2>
+    <p>Lexikální analýza je první krok při zpracování programu. Rozděluje kód na <em>tokeny</em>, což jsou základní stavební bloky, jako klíčová slova, identifikátory nebo literály.</p>
+    <p>Příklad: Kód <code>Vytvoř funkci</code> se rozdělí na tokeny <code>Vytvoř</code> (klíčové slovo) a <code>funkci</code> (klíčové slovo).</p>
+    <p>V DSL můžeme použít příkaz <code>Rozděl řetězec</code> k rozdělení kódu na slova podle mezer.</p>
     <p>Příklad:</p>
     <pre>
-Definuj proměnnou jmeno jako "Petr"
-Definuj proměnnou vek jako 25
-Vrať jmeno
+Definuj proměnnou kód jako "Vytvoř funkci"
+Definuj proměnnou slova jako výsledek funkce Rozděl řetězec kód na " "
+Vrať slova
     </pre>
-    <p>Tento kód uloží jméno „Petr“ a věk 25 do proměnných a vrátí jméno.</p>
-
-    <h2>Kapitola 4: Funkce</h2>
-    <p>Funkce jsou bloky kódu, které vykonávají konkrétní úkol. V DSL vytváříme funkce příkazem <code>Vytvoř funkci</code>.</p>
-    <p>Příklad:</p>
-    <pre>
-Vytvoř funkci pojmenovanou pozdrav která přijímá hodnotu jmeno
-Vrať "Ahoj, " spojené s hodnotou jmeno
-    </pre>
-    <p>Tato funkce vezme jméno a vrátí pozdrav, např. „Ahoj, Petr“.</p>
-
-    <h2>Kapitola 5: Podmínky</h2>
-    <p>Podmínky umožňují vykonat kód jen za určitých okolností. Používáme příkaz <code>Pokud</code>.</p>
-    <p>Příklad:</p>
-    <pre>
-Definuj proměnnou vek jako 18
-Pokud je vek větší nebo rovno 18
-  Vrať "Dospělý"
-Jinak
-  Vrať "Dítě"
-    </pre>
-    <p>Tento kód vrátí „Dospělý“, protože věk je 18.</p>
-
-    <h2>Kapitola 6: Aritmetické operace</h2>
-    <p>DSL podporuje základní aritmetické operace jako sčítání, odčítání, násobení a dělení.</p>
-    <p>Příklad:</p>
-    <pre>
-Definuj proměnnou a jako 10
-Definuj proměnnou b jako 5
-Vrať součet a a b
-    </pre>
-    <p>Tento kód vrátí 15 (10 + 5).</p>
-
-    <h2>Kapitola 7: Rekurze</h2>
-    <p>Rekurze umožňuje funkci volat samu sebe. Je užitečná pro úkoly, jako je výpočet faktoriálu.</p>
-    <p>Příklad:</p>
-    <pre>
-Vytvoř funkci pojmenovanou faktoriál která přijímá hodnotu n
-Pokud je n menší nebo rovno 1
-  Vrať 1
-Jinak
-  Vrať součin n a výsledek funkce faktoriál s hodnotami odečti n a 1
-    </pre>
-    <p>Tato funkce vypočítá faktoriál čísla, např. pro <code>n = 5</code> vrátí 120 (5 * 4 * 3 * 2 * 1).</p>
-
-    <h2>Kapitola 8: Práce se seznamy</h2>
-    <p>Seznamy umožňují ukládat více hodnot. DSL podporuje operace jako přidávání prvků nebo procházení seznamu.</p>
-    <p>Příklad:</p>
-    <pre>
-Definuj proměnnou seznam jako seznam obsahující 1 a 2 a 3
-Přidej 4 do seznamu seznam
-Vrať seznam
-    </pre>
-    <p>Tento kód vytvoří seznam [1, 2, 3], přidá 4 a vrátí [1, 2, 3, 4].</p>
-    <p>Další příklad s procházením seznamu:</p>
-    <pre>
-Vytvoř funkci pojmenovanou soucet_seznamu která přijímá hodnotu seznam
-Definuj proměnnou soucet jako 0
-Pro každý prvek v seznamu proveď
-  Přičti prvek k proměnné soucet
-Vrať soucet
-    </pre>
-    <p>Tato funkce sečte všechny prvky seznamu, např. pro [1, 2, 3] vrátí 6.</p>
+    <p>Tento kód vrátí seznam <code>["Vytvoř", "funkci"]</code>. Dalším krokem je rozpoznat, zda je slovo klíčové slovo, identifikátor nebo literál, což je základem pro vytvoření parseru.</p>
 </body>
 </html>
