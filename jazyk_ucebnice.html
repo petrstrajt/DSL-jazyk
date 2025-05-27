@@ -1,4 +1,43 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -39,10 +78,60 @@
     <h1>Učebnice DSL</h1>
     <p>Tato učebnice vás provede základy programovacího jazyka DSL, který používá českou syntaxi a převádí se na Common Lisp.</p>
 
-    <h2>Kapitola 1: Úvod</h2>
-    <p>Obsah této kapitoly bude doplněn později.</p>
+    <h2>Kapitola 1: Úvod do DSL</h2>
+    <p>DSL je jednoduchý programovací jazyk navržený pro výuku programování. Jeho syntaxe je v češtině, což usnadňuje učení pro začátečníky. Kód v DSL je převáděn na Common Lisp.</p>
+    <p>Příklad jednoduchého programu:</p>
+    <pre>
+Definuj proměnnou pozdrav jako "Ahoj, světe!"
+Vrať pozdrav
+    </pre>
 
-    <!-- Kapitoly 2–8 by byly podobně prázdné nebo s osnovou, pokud nejsou definovány -->
+    <h2>Kapitola 2: Proměnné a základní operace</h2>
+    <p>Tato kapitola vysvětluje, jak definovat proměnné a provádět základní operace, např. sčítání nebo spojení řetězců. Příklad:</p>
+    <pre>
+Definuj proměnnou x jako 5
+Definuj proměnnou y jako 3
+Vrať x plus y
+    </pre>
+
+    <h2>Kapitola 3: Podmínky</h2>
+    <p>Podmíněné příkazy umožňují vykonávat kód na základě podmínek. Příklad:</p>
+    <pre>
+Pokud je x rovná 5 proveď
+    Vrať "x je pět"
+    </pre>
+
+    <h2>Kapitola 4: Cykly</h2>
+    <p>Cykly, jako <code>Pro každý prvek</code>, umožňují opakování kódu. Příklad:</p>
+    <pre>
+Definuj proměnnou cisla jako seznam obsahující 1 a 2 a 3
+Pro každý prvek v seznamu cisla proveď
+    Vrať prvek
+    </pre>
+
+    <h2>Kapitola 5: Funkce</h2>
+    <p>Funkce umožňují znovupoužití kódu. Příklad:</p>
+    <pre>
+Vytvoř funkci pojmenovanou pozdrav která přijímá hodnotu jmeno
+Vrať "Ahoj, " spojené s hodnotou jmeno
+    </pre>
+
+    <h2>Kapitola 6: Práce se soubory</h2>
+    <p>DSL umožňuje čtení a zápis do souborů. Příklad:</p>
+    <pre>
+Zapiš "Ahoj" do souboru pojmenovaného "vystup.txt"
+    </pre>
+
+    <h2>Kapitola 7: Práce s řetězci</h2>
+    <p>Příkazy jako <code>Rozděl řetězec</code> a <code>Spoj řetězec</code> usnadňují manipulaci s textem. Příklad:</p>
+    <pre>
+Definuj proměnnou text jako "Ahoj světe"
+Definuj proměnnou slova jako výsledek funkce Rozděl řetězec text na " "
+Vrať slova
+    </pre>
+
+    <h2>Kapitola 8: Základy Common Lisp</h2>
+    <p>Tato kapitola vysvětluje, jak DSL kód odpovídá Common Lisp kódu. Např. <code>Vytvoř funkci</code> se převádí na <code>(defun ...)</code>.</p>
 
     <h2>Kapitola 9: Lexikální analýza</h2>
     <p>Lexikální analýza je první krok při zpracování programu. Rozděluje kód na <em>tokeny</em>, což jsou základní stavební bloky, jako klíčová slova, identifikátory nebo literály.</p>
