@@ -6,7 +6,7 @@
   <title>DSL – Referenční příručka</title>
   <style>
     body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-    h1, h2 { color: #2c3e50; }
+    h1, h2, h3 { color: #2c3e50; }
     code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
     pre { background: #f8f8f8; padding: 1em; border-left: 4px solid #ccc; overflow-x: auto; }
     .note { background: #e8f4f8; padding: 1em; border-radius: 4px; margin: 1em 0; }
@@ -15,15 +15,15 @@
 </head>
 <body>
   <h1>Referenční příručka DSL jazyka</h1>
-  <p><em>Verze 1.0 – aktualizováno 8. 12. 2025</em></p>
+  <p><em>Verze 1.1 – aktualizováno 9. 12. 2025</em></p>
 
-  <p>Tento jazyk je doménově specifický (DSL) nad Common Lispem, navržený pro psaní programů v přirozené češtině bez závorek. Cílem je jednoduchost, srozumitelnost a přesnost.</p>
+  <p>Tento jazyk je doménově specifický (DSL) nad Common Lispem, navržený pro psaní programů v přirozené češtině bez závorek. Cílem je jednoduchost, srozumitelnost a přesnost pro programátory, kteří znají základy Common Lispu.</p>
 
   <h2>Obecná pravidla</h2>
   <ul>
-    <li><strong>Textové hodnoty</strong> (řetězce) se píší <strong>v dvojitých uvozovkách</strong>: <code>"text"</code>.</li>
-    <li><strong>Identifikátory</strong> (jména proměnných) se píší <strong>bez uvozovek</strong>: <code>jmeno</code>, <code>obsah</code>.</li>
-    <li><strong>Klíčové fráze</strong> jsou pevně dané: <code>na obrazovku</code>, <code>ze vstupu</code>, <code>do souboru</code>, atd.</li>
+    <li><strong>Textové hodnoty</strong> se píší <strong>v dvojitých uvozovkách</strong>: <code>"text"</code>.</li>
+    <li><strong>Identifikátory</strong> (jména proměnných, funkcí, souborů) se píší <strong>bez uvozovek</strong>.</li>
+    <li><strong>Blokové konstrukce</strong> (funkce, podmínky, smyčky) musí být <strong>explicitně ukončeny</strong> příkazem <code>konec ...</code>.</li>
     <li>Jazyk je <strong>case-insensitive</strong>, ale doporučuje se psát příkazy malými písmeny.</li>
   </ul>
 
@@ -42,7 +42,7 @@
   <pre>načti uzivatel ze vstupu</pre>
   <p><strong>Překlad do Common Lispu:</strong></p>
   <pre>(let ((uzivatel (read-line)))
-  ;; další kód používající uzivatel
+  ;; tělo používající uzivatel
 )</pre>
   <div class="note">
     <strong>Poznámka:</strong> Proměnná je vytvořena lokálně v aktuálním bloku.
@@ -70,9 +70,6 @@
                    :if-exists :supersede
                    :if-does-not-exist :create)
   (format s "~a~%" "Dnes je krásný den."))</pre>
-  <div class="note">
-    <strong>Budoucí rozšíření:</strong> Pokud bude <code>obsah</code> bez uvozovek, bude interpretován jako hodnota proměnné.
-  </div>
 
   <h3>5. Podmínka – test existence souboru</h3>
   <p><code>pokud soubor "název_souboru" existuje, proveď příkaz</code></p>
@@ -82,12 +79,45 @@
   <pre>(when (probe-file "konfig.txt")
   (format t "Konfigurace načtena.~%"))</pre>
 
+  <h2>Definice funkcí</h2>
+
+  <h3>6. Definice funkce bez parametrů</h3>
+  <p><code>definuj funkci jméno_funkce:<br>&nbsp;&nbsp;příkazy<br>konec funkce</code></p>
+  <p><strong>Příklad:</strong></p>
+  <pre>definuj funkci ahoj:
+  vypiš "Ahoj světe" na obrazovku
+konec funkce</pre>
+  <p><strong>Překlad do Common Lispu:</strong></p>
+  <pre>(defun ahoj ()
+  (format t "Ahoj světe~%"))</pre>
+
+  <h3>7. Definice funkce s jedním parametrem</h3>
+  <p><code>definuj funkci jméno_funkce s parametrem jmeno_parametru:<br>&nbsp;&nbsp;příkazy<br>konec funkce</code></p>
+  <p><strong>Příklad:</strong></p>
+  <pre>definuj funkci pozdrav s parametrem jmeno:
+  vypiš "Ahoj, @jmeno!" na obrazovku
+konec funkce</pre>
+  <p><strong>Překlad do Common Lispu:</strong></p>
+  <pre>(defun pozdrav (jmeno)
+  (format t "Ahoj, ~a!~%" jmeno))</pre>
+  <div class="note">
+    <strong>Poznámka:</strong> Proměnné v řetězcích se zapisují jako <code>@jmeno</code>. Tato funkce bude v budoucích verzích rozšířena.
+  </div>
+
+  <h3>8. Volání funkce</h3>
+  <p><code>zavolej funkci jméno_funkce</code></p>
+  <p><strong>Příklad:</strong></p>
+  <pre>zavolej funkci ahoj</pre>
+  <p><strong>Překlad do Common Lispu:</strong></p>
+  <pre>(ahoj)</pre>
+
   <h2>Plánované rozšíření</h2>
   <ul>
-    <li>Podpora proměnných v řetězcích: <code>"Ahoj, @uzivatel!"</code></li>
-    <li>Příkaz <code>ukonči program</code></li>
-    <li>Smyčky: <code>opakuj, dokud ...</code></li>
-    <li>Podpora číselných a logických hodnot</li>
+    <li>Podpora více parametrů ve funkcích</li>
+    <li>Explicitní návratové hodnoty (<code>vrať hodnotu</code>)</li>
+    <li>Smyčky: <code>opakuj, dokud ...</code> + <code>konec smyčky</code></li>
+    <li>Pokročilé podmínky: <code>pokud ... pak ... jinak ...</code> + <code>konec podmínky</code></li>
+    <li>Chybové hlášky a ladění</li>
   </ul>
 
   <hr>
