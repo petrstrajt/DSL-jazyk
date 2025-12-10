@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -15,7 +16,7 @@
 </head>
 <body>
   <h1>Referenční příručka DSL jazyka</h1>
-  <p><em>Verze 1.1 – aktualizováno 9. 12. 2025</em></p>
+  <p><em>Verze 1.2 – aktualizováno 10. 12. 2025</em></p>
 
   <p>Tento jazyk je doménově specifický (DSL) nad Common Lispem, navržený pro psaní programů v přirozené češtině bez závorek. Cílem je jednoduchost, srozumitelnost a přesnost pro programátory, kteří znají základy Common Lispu.</p>
 
@@ -23,7 +24,7 @@
   <ul>
     <li><strong>Textové hodnoty</strong> se píší <strong>v dvojitých uvozovkách</strong>: <code>"text"</code>.</li>
     <li><strong>Identifikátory</strong> (jména proměnných, funkcí, souborů) se píší <strong>bez uvozovek</strong>.</li>
-    <li><strong>Blokové konstrukce</strong> (funkce, podmínky, smyčky) musí být <strong>explicitně ukončeny</strong> příkazem <code>konec ...</code>.</li>
+    <li><strong>Blokové konstrukce</strong> (funkce, seznamy, smyčky) musí být <strong>explicitně ukončeny</strong> příkazem <code>konec ...</code>.</li>
     <li>Jazyk je <strong>case-insensitive</strong>, ale doporučuje se psát příkazy malými písmeny.</li>
   </ul>
 
@@ -31,93 +32,85 @@
 
   <h3>1. Výstup na obrazovku</h3>
   <p><code>vypiš "text" na obrazovku</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>vypiš "Zadej své jméno:" na obrazovku</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
   <pre>(format t "~a~%" "Zadej své jméno:")</pre>
 
   <h3>2. Načtení vstupu od uživatele</h3>
   <p><code>načti jméno_proměnné ze vstupu</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>načti uzivatel ze vstupu</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(let ((uzivatel (read-line)))
-  ;; tělo používající uzivatel
-)</pre>
-  <div class="note">
-    <strong>Poznámka:</strong> Proměnná je vytvořena lokálně v aktuálním bloku.
-  </div>
+  <pre>(let ((uzivatel (read-line))) ... )</pre>
 
   <h3>3. Otevření souboru</h3>
   <p><code>otevři soubor "název_souboru" do proměnné jméno_proměnné</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>otevři soubor "denní_záznam.txt" do proměnné obsah</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(let ((obsah (with-open-file (s "denní_záznam.txt"
-                                :if-does-not-exist nil)
-               (when s
-                 (loop for line = (read-line s nil nil)
-                       while line
-                       collect line)))))</pre>
+  <pre>(let ((obsah (with-open-file (s "denní_záznam.txt" :if-does-not-exist nil) ... )))</pre>
 
   <h3>4. Uložení do souboru</h3>
   <p><code>ulož "obsah" do souboru "název_souboru"</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>ulož "Dnes je krásný den." do souboru "poznámka.txt"</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(with-open-file (s "poznámka.txt"
-                   :direction :output
-                   :if-exists :supersede
-                   :if-does-not-exist :create)
-  (format s "~a~%" "Dnes je krásný den."))</pre>
+  <pre>(with-open-file (s "poznámka.txt" :direction :output ...) (format s "~a~%" "Dnes je krásný den."))</pre>
 
   <h3>5. Podmínka – test existence souboru</h3>
   <p><code>pokud soubor "název_souboru" existuje, proveď příkaz</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>pokud soubor "konfig.txt" existuje, vypiš "Konfigurace načtena." na obrazovku</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(when (probe-file "konfig.txt")
-  (format t "Konfigurace načtena.~%"))</pre>
+  <pre>(when (probe-file "konfig.txt") (format t "Konfigurace načtena.~%"))</pre>
 
   <h2>Definice funkcí</h2>
 
   <h3>6. Definice funkce bez parametrů</h3>
-  <p><code>definuj funkci jméno_funkce:<br>&nbsp;&nbsp;příkazy<br>konec funkce</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>definuj funkci ahoj:
   vypiš "Ahoj světe" na obrazovku
 konec funkce</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(defun ahoj ()
-  (format t "Ahoj světe~%"))</pre>
+  <pre>(defun ahoj () (format t "Ahoj světe~%"))</pre>
 
   <h3>7. Definice funkce s jedním parametrem</h3>
-  <p><code>definuj funkci jméno_funkce s parametrem jmeno_parametru:<br>&nbsp;&nbsp;příkazy<br>konec funkce</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>definuj funkci pozdrav s parametrem jmeno:
   vypiš "Ahoj, @jmeno!" na obrazovku
 konec funkce</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
-  <pre>(defun pozdrav (jmeno)
-  (format t "Ahoj, ~a!~%" jmeno))</pre>
-  <div class="note">
-    <strong>Poznámka:</strong> Proměnné v řetězcích se zapisují jako <code>@jmeno</code>. Tato funkce bude v budoucích verzích rozšířena.
-  </div>
+  <pre>(defun pozdrav (jmeno) (format t "Ahoj, ~a!~%" jmeno))</pre>
 
   <h3>8. Volání funkce</h3>
   <p><code>zavolej funkci jméno_funkce</code></p>
-  <p><strong>Příklad:</strong></p>
   <pre>zavolej funkci ahoj</pre>
-  <p><strong>Překlad do Common Lispu:</strong></p>
   <pre>(ahoj)</pre>
+
+  <h2>Práce se seznamy</h2>
+
+  <h3>9. Vytvoření seznamu</h3>
+  <p><code>začátek seznamu<br>&nbsp;&nbsp;prvek1<br>&nbsp;&nbsp;prvek2<br>konec seznamu</code></p>
+  <pre>začátek seznamu
+  "deka"
+  "lano"
+  "mapa"
+konec seznamu
+ulož do proměnné batoh</pre>
+  <pre>(let ((batoh '("deka" "lano" "mapa"))) ... )</pre>
+
+  <h3>10. Výpis všech položek seznamu</h3>
+  <p><code>pro každý prvek v jméno_seznamu:<br>&nbsp;&nbsp;vypiš prvek na obrazovku<br>konec smyčky</code></p>
+  <pre>pro každý prvek v batoh:
+  vypiš "- @prvek" na obrazovku
+konec smyčky</pre>
+  <pre>(dolist (prvek batoh) (format t "- ~a~%" prvek))</pre>
+
+  <h3>11. Test, zda položka je v seznamu</h3>
+  <p><code>pokud "položka" je v jméno_seznamu, proveď příkaz</code></p>
+  <pre>pokud "mapa" je v batoh, vypiš "Máš mapu!" na obrazovku</pre>
+  <pre>(when (member "mapa" batoh :test #'string=) (format t "Máš mapu!~%"))</pre>
+
+  <h3>12. Přidání položky do seznamu (plánováno)</h3>
+  <p><code>přidej "nová položka" do jméno_seznamu</code></p>
+  <div class="note">
+    Tato funkce bude implementována v budoucí verzi.
+  </div>
 
   <h2>Plánované rozšíření</h2>
   <ul>
-    <li>Podpora více parametrů ve funkcích</li>
+    <li>Příkazy pro úpravu seznamu: <code>přidej</code>, <code>odeber</code></li>
+    <li>Více parametrů ve funkcích</li>
     <li>Explicitní návratové hodnoty (<code>vrať hodnotu</code>)</li>
-    <li>Smyčky: <code>opakuj, dokud ...</code> + <code>konec smyčky</code></li>
-    <li>Pokročilé podmínky: <code>pokud ... pak ... jinak ...</code> + <code>konec podmínky</code></li>
-    <li>Chybové hlášky a ladění</li>
+    <li>Smyčky s podmínkou: <code>opakuj, dokud ...</code></li>
+    <li>Pokročilé chybové hlášky</li>
   </ul>
 
   <hr>
