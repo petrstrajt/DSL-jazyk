@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -16,7 +15,7 @@
 </head>
 <body>
   <h1>Referenční příručka DSL jazyka</h1>
-  <p><em>Verze 1.2 – aktualizováno 10. 12. 2025</em></p>
+  <p><em>Verze 1.3 – aktualizováno 10. 12. 2025</em></p>
 
   <p>Tento jazyk je doménově specifický (DSL) nad Common Lispem, navržený pro psaní programů v přirozené češtině bez závorek. Cílem je jednoduchost, srozumitelnost a přesnost pro programátory, kteří znají základy Common Lispu.</p>
 
@@ -98,15 +97,24 @@ konec smyčky</pre>
   <pre>pokud "mapa" je v batoh, vypiš "Máš mapu!" na obrazovku</pre>
   <pre>(when (member "mapa" batoh :test #'string=) (format t "Máš mapu!~%"))</pre>
 
-  <h3>12. Přidání položky do seznamu (plánováno)</h3>
-  <p><code>přidej "nová položka" do jméno_seznamu</code></p>
+  <h3>12. Přidání položky do seznamu</h3>
+  <p><code>přidej "položka" do jméno_seznamu</code></p>
+  <pre>přidej "nůž" do batoh</pre>
+  <pre>(setf batoh (cons "nůž" batoh))</pre>
   <div class="note">
-    Tato funkce bude implementována v budoucí verzi.
+    Položka se přidá na začátek seznamu (nejefektivnější operace pro spojový seznam).
+  </div>
+
+  <h3>13. Odebrání položky ze seznamu</h3>
+  <p><code>odeber "položka" ze jméno_seznamu</code></p>
+  <pre>odeber "deka" z batoh</pre>
+  <pre>(setf batoh (remove "deka" batoh :test #'string=))</pre>
+  <div class="note">
+    Odebere všechny výskyty dané položky.
   </div>
 
   <h2>Plánované rozšíření</h2>
   <ul>
-    <li>Příkazy pro úpravu seznamu: <code>přidej</code>, <code>odeber</code></li>
     <li>Více parametrů ve funkcích</li>
     <li>Explicitní návratové hodnoty (<code>vrať hodnotu</code>)</li>
     <li>Smyčky s podmínkou: <code>opakuj, dokud ...</code></li>
@@ -117,3 +125,4 @@ konec smyčky</pre>
   <p><em>Dokument bude průběžně aktualizován. Zdroj: <a href="https://github.com/petrstrajt/DSL-jazyk">GitHub – DSL-jazyk</a></em></p>
 </body>
 </html>
+
