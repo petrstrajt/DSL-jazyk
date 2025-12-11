@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specifikace DSL jazyka</title>
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    h1, h2, h3 { color: #2c3e50; }
+    code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
+    pre { background: #f8f8f8; padding: 1em; border-left: 4px solid #ccc; overflow-x: auto; }
+    ul, ol { margin-bottom: 1rem; }
+    .rule { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <h1>Specifikace DSL jazyka</h1>
+  <p><em>Verze 1.0 – 10. 12. 2025</em></p>
+  <p>Tato specifikace definuje oficiální syntaxi a sémantiku doménově specifického jazyka (DSL) navrženého jako česky laděná nadstavba nad Common Lispem. Cílem je jednoznačnost, čitelnost a přímá převoditelnost na Common Lisp.</p>
+
+  <h2>1. Základní principy</h2>
+  <div class="rule">
+    <h3>1.1 Jazyk je bez závorek</h3>
+    <p>Syntaxe nepoužívá kulaté závorky. Struktura kódu je vyjádřena pomocí <strong>řádkové struktury</strong> a <strong>explicitních ukončovacích příkazů</strong>.</p>
+  </div>
+
+  <div class="rule">
+    <h3>1.2 Vstupní kód je case-insensitive</h3>
+    <p>Rozlišování velkých a malých písmen není vyžadováno, ale doporučuje se psát všechny příkazy malými písmeny pro konzistenci.</p>
+  </div>
+
+  <div class="rule">
+    <h3>1.3 Konec bloku je explicitní</h3>
+    <p>Každá bloková konstrukce (funkce, seznam, smyčka) musí být ukončena příkazem <code>konec ...</code> (např. <code>konec funkce</code>, <code>konec seznamu</code>).</p>
+  </div>
+
+  <h2>2. Datové typy</h2>
+  <div class="rule">
+    <h3>2.1 Řetězce</h3>
+    <p>Textové hodnoty se zapisují v dvojitých uvozovkách: <code>"text"</code>.</p>
+  </div>
+
+  <div class="rule">
+    <h3>2.2 Identifikátory</h3>
+    <p>Jména proměnných, funkcí a souborů se píší bez uvozovek a bez mezer: <code>batoh</code>, <code>jmeno</code>, <code>hlavni</code>.</p>
+  </div>
+
+  <div class="rule">
+    <h3>2.3 Čísla</h3>
+    <p>Číselné hodnoty se zapisují standardně (např. <code>42</code>, <code>3.14</code>) – bez uvozovek.</p>
+  </div>
+
+  <h2>3. Základní příkazy</h2>
+  <div class="rule">
+    <h3>3.1 Výstup</h3>
+    <p><code>vypiš "text" na obrazovku</code></p>
+  </div>
+
+  <div class="rule">
+    <h3>3.2 Vstup</h3>
+    <p><code>načti jméno_proměnné ze vstupu</code></p>
+  </div>
+
+  <div class="rule">
+    <h3>3.3 Práce se soubory</h3>
+    <ul>
+      <li><code>otevři soubor "název" do proměnné proměnná</code></li>
+      <li><code>ulož "obsah" do souboru "název"</code></li>
+    </ul>
+  </div>
+
+  <div class="rule">
+    <h3>3.4 Podmínky</h3>
+    <p><code>pokud soubor "název" existuje, proveď příkaz</code><br>
+    <code>pokud "položka" je v seznam, proveď příkaz</code></p>
+  </div>
+
+  <h2>4. Definice funkcí</h2>
+  <div class="rule">
+    <h3>4.1 Definice bez parametrů</h3>
+    <p>
+      <code>definuj funkci jméno:<br>
+      &nbsp;&nbsp;příkazy<br>
+      konec funkce</code>
+    </p>
+  </div>
+
+  <div class="rule">
+    <h3>4.2 Definice s jedním parametrem</h3>
+    <p>
+      <code>definuj funkci jméno s parametrem param:<br>
+      &nbsp;&nbsp;příkazy<br>
+      konec funkce</code>
+    </p>
+  </div>
+
+  <div class="rule">
+    <h3>4.3 Volání funkce</h3>
+    <p><code>zavolej funkci jméno</code></p>
+  </div>
+
+  <h2>5. Práce se seznamy</h2>
+  <div class="rule">
+    <h3>5.1 Vytvoření seznamu</h3>
+    <p>
+      <code>začátek seznamu<br>
+      &nbsp;&nbsp;prvek1<br>
+      &nbsp;&nbsp;prvek2<br>
+      konec seznamu<br>
+      ulož do proměnné jméno</code>
+    </p>
+  </div>
+
+  <div class="rule">
+    <h3>5.2 Procházení seznamu</h3>
+    <p>
+      <code>pro každý prvek v jméno:<br>
+      &nbsp;&nbsp;příkazy<br>
+      konec smyčky</code>
+    </p>
+  </div>
+
+  <div class="rule">
+    <h3>5.3 Úprava seznamu</h3>
+    <ul>
+      <li><code>přidej "položka" do jméno</code> – přidá na začátek</li>
+      <li><code>odeber "položka" ze jméno</code> – odstraní všechny výskyty</li>
+    </ul>
+  </div>
+
+  <h2>6. Proměnné v řetězcích (návrh)</h2>
+  <div class="rule">
+    <h3>6.1 Interpolace</h3>
+    <p>V řetězcích lze odkazovat na proměnné pomocí zápisu <code>@jméno</code>:<br>
+    <code>vypiš "Ahoj, @jméno!" na obrazovku</code></p>
+    <p>Tato funkce bude plně implementována v budoucí verzi.</p>
+  </div>
+
+  <h2>7. Filozofie jazyka</h2>
+  <div class="rule">
+    <p>DSL není určen pro laiky, ale pro programátory, kteří znají Common Lisp a chtějí psát kód v přirozené češtině bez závorek. Cílem je <strong>čitelnost</strong>, nikoli abstrakce od jazyka. Jazyk je <strong>imperativní</strong>, <strong>modulární</strong> a <strong>rozšiřitelný</strong>.</p>
+  </div>
+
+  <hr>
+  <p><em>Zdroj: <a href="https://github.com/petrstrajt/DSL-jazyk">GitHub – DSL-jazyk</a></em></p>
+</body>
+</html>
