@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Základní funkce Common Lispu</title>
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    h1, h2, h3 { color: #2c3e50; }
+    ul { margin-bottom: 1.2rem; }
+    li { margin-bottom: 0.4rem; }
+    .section { margin-bottom: 2rem; }
+    .note { background: #f8f9fa; padding: 1em; border-left: 4px solid #6c757d; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>Základní funkce Common Lispu</h1>
+  <p>Tento seznam obsahuje klíčové funkce a speciální formy jazyka Common Lisp, které jsou relevantní pro vývoj a pochopení DSL jazyka. Každá položka obsahuje název funkce a krátký popis v češtině.</p>
+
+  <div class="section">
+    <h2>1. Definice a struktura kódu</h2>
+    <ul>
+      <li><strong>defun</strong> – Definuje novou funkci s daným názvem a tělem.</li>
+      <li><strong>defvar</strong> – Definuje globální proměnnou s počáteční hodnotou.</li>
+      <li><strong>let</strong> – Vytvoří lokální proměnné platné jen uvnitř svého bloku.</li>
+      <li><strong>quote</strong> – Zabrání vyhodnocení výrazu (často zkráceno jako <code>'</code>).</li>
+      <li><strong>progn</strong> – Vyhodnotí více výrazů postupně a vrátí hodnotu posledního.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. Řízení toku programu</h2>
+    <ul>
+      <li><strong>if</strong> – Provede jeden z dvou výrazů podle podmínky (pravda/nepravda).</li>
+      <li><strong>when</strong> – Provede výraz, pokud je podmínka pravdivá.</li>
+      <li><strong>loop</strong> – Vytvoří smyčku (nejběžnější formy jsou nekonečné smyčky nebo iterace přes seznamy).</li>
+      <li><strong>dolist</strong> – Provede tělo pro každý prvek v seznamu.</li>
+      <li><strong>cond</strong> – Vyhodnotí řadu podmínek a provede první odpovídající větev.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>3. Práce se seznamy</h2>
+    <ul>
+      <li><strong>list</strong> – Vytvoří nový seznam ze zadaných prvků.</li>
+      <li><strong>cons</strong> – Přidá prvek na začátek seznamu.</li>
+      <li><strong>car</strong> – Vrátí první prvek seznamu.</li>
+      <li><strong>cdr</strong> – Vrátí zbytek seznamu bez prvního prvku.</li>
+      <li><strong>member</strong> – Zjistí, zda je daný prvek v seznamu.</li>
+      <li><strong>remove</strong> – Odebere všechny výskyty prvku ze seznamu.</li>
+      <li><strong>append</strong> – Spojí dva nebo více seznamů do jednoho.</li>
+      <li><strong>length</strong> – Vrátí počet prvků v seznamu.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. Práce s řetězci</h2>
+    <ul>
+      <li><strong>string=</strong> – Porovná dva řetězce na přesnou shodu.</li>
+      <li><strong>subseq</strong> – Vrátí část řetězce mezi danými pozicemi.</li>
+      <li><strong>position</strong> – Nalezne pozici znaku nebo podřetězce v řetězci.</li>
+      <li><strong>concatenate</strong> – Spojí více řetězců do jednoho.</li>
+      <li><strong>string-trim</strong> – Odebere zadané znaky z konce a začátku řetězce.</li>
+      <li><strong>char</strong> – Vrátí znak na dané pozici v řetězci.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. Vstup a výstup (I/O)</h2>
+    <ul>
+      <li><strong>format</strong> – Vypisuje formátovaný text na obrazovku nebo do souboru.</li>
+      <li><strong>read-line</strong> – Načte jeden řádek ze standardního vstupu.</li>
+      <li><strong>print</strong> – Vypíše hodnotu s uvozovkami a novým řádkem.</li>
+      <li><strong>write-line</strong> – Vypíše řetězec bez uvozovek a přidá nový řádek.</li>
+      <li><strong>finish-output</strong> – Vyprázdní výstupní buffer (zajistí okamžitý výpis).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Práce se soubory</h2>
+    <ul>
+      <li><strong>with-open-file</strong> – Otevře soubor, provede kód a automaticky jej zavře.</li>
+      <li><strong>probe-file</strong> – Zjistí, zda soubor existuje (vrátí jeho cestu nebo <code>NIL</code>).</li>
+      <li><strong>open</strong> – Ručně otevře soubor a vrátí stream (vyžaduje ruční uzavření).</li>
+      <li><strong>close</strong> – Uzavře otevřený soubor nebo stream.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>7. Porovnávání a logika</h2>
+    <ul>
+      <li><strong>=</strong> – Porovná čísla na rovnost.</li>
+      <li><strong>equal</strong> – Porovná libovolné hodnoty (čísla, řetězce, seznamy) na shodu.</li>
+      <li><strong>not</strong> – Negace – převrátí pravdivostní hodnotu (<code>NIL</code> → <code>T</code>, jinak <code>NIL</code>).</li>
+      <li><strong>and</strong> – Vrátí poslední hodnotu, pokud jsou všechny argumenty pravdivé.</li>
+      <li><strong>or</strong> – Vrátí první pravdivou hodnotu mezi argumenty.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>8. Práce s čísly</h2>
+    <ul>
+      <li><strong>+</strong>, <strong>-</strong>, <strong>*</strong>, <strong>/</strong> – Základní aritmetické operace.</li>
+      <li><strong>floor</strong>, <strong>ceiling</strong> – Zaokrouhlení dolů nebo nahoru.</li>
+      <li><strong>mod</strong> – Zbytek po dělení.</li>
+      <li><strong>numberp</strong> – Zjistí, zda je hodnota číslo.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>9. Speciální hodnoty a typy</h2>
+    <ul>
+      <li><strong>nil</strong> – Znamená nepravdu, prázdný seznam a „žádná hodnota“.</li>
+      <li><strong>t</strong> – Znamená logickou pravdu.</li>
+      <li><strong>listp</strong> – Zjistí, zda je hodnota seznam.</li>
+      <li><strong>stringp</strong> – Zjistí, zda je hodnota řetězec.</li>
+      <li><strong>symbolp</strong> – Zjistí, zda je hodnota symbol.</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <p>Tento seznam je určen jako pomůcka pro vývojáře DSL jazyka. Neobsahuje všechny funkce Common Lispu, ale pouze ty nejdůležitější pro běžné programovací úlohy.</p>
+  </div>
+
+  <hr>
+  <p><em>Zdroj: <a href="https://github.com/petrstrajt/DSL-jazyk">GitHub – DSL-jazyk</a></em></p>
+</body>
+</html>
